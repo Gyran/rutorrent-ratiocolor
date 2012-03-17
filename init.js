@@ -23,6 +23,15 @@ colors = [  [255, 0, 0],
             [0, 255, 0],
             [123, 17, 203]
          ];
+
+//changeWhatEnum = ["cell-background", "font"];
+
+// what to change:
+// cell-background
+// font
+changeWhat = "cell-background";
+
+settings = false; // not yet working as it should
          
 /* Example
 If ratio is 0 the color will be the first definde color. The the more the ratio approach
@@ -71,58 +80,66 @@ theWebUI.setRatioColors = function(){
             color = colors[colors.length - 1];
         }
         
-        $(this).css("background-color", colorRGB(color));  
+        switch(changeWhat)
+        {
+            case "font":
+                $(this).css("color", colorRGB(color));  
+                break;
+            case "cell-background":
+            default:
+                $(this).css("background-color", colorRGB(color));  
+                break;
+        }
     });
     
 };
 
 plugin.onLangLoaded = function() {
-	if(this.enabled) {
-	   error = false;
-	   
-	   // Error checking
-	   if(colors.length != levels.length){
-	       log(theUILang.ratiocolorLengthError);
-	       error = true;
-	   }
-	   if(levels[0] != 0){
-	       log(theUILang.ratiocolorLevel0);
-	       error = true;
-	   }
-	   if(!error){
-    	   plugin.tempFunc = theWebUI.tables.trt.obj.refreshRows;
-	      theWebUI.tables.trt.obj.refreshRows = function(height, fromScroll){
-	           plugin.tempFunc.call(theWebUI.tables.trt.obj, height, fromScroll);
-	           theWebUI.setRatioColors();
-    	   };
-    	   
-  	       rcSettingsDiv = $('<div>').attr("id","st_ratiocolor");
-  	       fieldset = $('<fieldset>').html("<legend>" + theUILang.ratiocolorLegend + "</legend>");
-  	       fieldset.append(theWebUI.ratiocolorLevelsbar(levels, colors));
-  	       
-  	       
-  	       // New level add
-  	       divAdd = $('<div>').attr("id", "ratiocolorAddNewLevel");
-  	       divAdd.html('Level: <input id="rcAddLvl" type="text" /><br />Color: #<input id="rcAddColor" type="text" />')
-  	       btnAdd = $('<input>').attr("type", "button").attr("value", "New level");
-  	       btnAdd.click(function()
-  	       {
-  	       		levels.push($("#rcAddLvl").val());
-  	       		//colors.add($("#rcAddColor").val());
-				colors.push([255,255,255]);
+    if(this.enabled) {
+       error = false;
+       
+       // Error checking
+       if(colors.length != levels.length){
+           log(theUILang.ratiocolorLengthError);
+           error = true;
+       }
+       if(levels[0] != 0){
+           log(theUILang.ratiocolorLevel0);
+           error = true;
+       }
+       
+       if(!error){
+           plugin.tempFunc = theWebUI.tables.trt.obj.refreshRows;
+          theWebUI.tables.trt.obj.refreshRows = function(height, fromScroll){
+               plugin.tempFunc.call(theWebUI.tables.trt.obj, height, fromScroll);
+               theWebUI.setRatioColors();
+            };
+            if(settings){
+                rcSettingsDiv = $('<div>').attr("id","st_ratiocolor");
+                fieldset = $('<fieldset>').html("<legend>" + theUILang.ratiocolorLegend + "</legend>");
+                fieldset.append(theWebUI.ratiocolorLevelsbar(levels, colors));
+               
+               
+                // New level add
+                divAdd = $('<div>').attr("id", "ratiocolorAddNewLevel");
+                divAdd.html('Level: <input id="rcAddLvl" type="text" /><br />Color: #<input id="rcAddColor" type="text" />')
+                btnAdd = $('<input>').attr("type", "button").attr("value", "New level");
+                btnAdd.click(function()
+                {
+                    levels.push($("#rcAddLvl").val());
+                    //colors.add($("#rcAddColor").val());
+                    colors.push([255,255,255]);
 
-  	       		theWebUI.updateRatiocolorsLevelsBar(levels, colors);
-  	       	
-  	       });
-  	       divAdd.append(btnAdd);
-  	       fieldset.append(divAdd);
-  	       
-  	       
-  	       
-    	   rcSettingsDiv.append(fieldset);
-    	   this.attachPageToOptions(rcSettingsDiv[0], theUILang.ratiocolorSettings);
-	   }   	   
-	}
+                    theWebUI.updateRatiocolorsLevelsBar(levels, colors);
+                });
+                divAdd.append(btnAdd);
+                fieldset.append(divAdd);
+               
+                rcSettingsDiv.append(fieldset);
+                typehis.attachPageToOptions(rcSettingsDiv[0], theUILang.ratiocolorSettings);
+            }
+        }
+    }
 }
 
 theWebUI.ratiocolorLevelsbar = function(levels, colors){
@@ -141,11 +158,11 @@ theWebUI.ratiocolorLevelsbar = function(levels, colors){
 
 theWebUI.updateRatiocolorsLevelsBar = function(levels, colors)
 {
-	$('#ratiocolorLevelsbar').html(theWebUI.ratiocolorLevelsbar(levels, colors).html());
+    $('#ratiocolorLevelsbar').html(theWebUI.ratiocolorLevelsbar(levels, colors).html());
 }
 
 plugin.onRemove = function()
 {
-	this.removePageFromOptions("st_ratiocolors");
+    this.removePageFromOptions("st_ratiocolors");
 }
 
