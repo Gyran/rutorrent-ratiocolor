@@ -32,6 +32,8 @@ colors = [  [255, 0, 0],
 changeWhat = "cell-background";
 
 settings = false; // not yet working as it should
+
+important = "!important\;"; //Adding support for other themes using the important-CSS trick
          
 /* Example
 If ratio is 0 the color will be the first definde color. The the more the ratio approach
@@ -87,7 +89,7 @@ theWebUI.setRatioColors = function(){
                 break;
             case "cell-background":
             default:
-                $(this).css("background-color", colorRGB(color));  
+                $(this).css("cssText", "background-color:" + colorRGB(color) + important);
                 $(this).css("background-image", "none");
                 break;
         }
