@@ -89,7 +89,7 @@ theWebUI.setRatioColors = function(){
                 break;
             case "cell-background":
             default:
-                $(this).css("cssText", "background-color:" + colorRGB(color) + important);
+                $(this).attr('style', function(i, s) { return s.replace(/background-color:(.*?);/, '') + 'background-color:' + colorRGB(color) + important });
                 $(this).css("background-image", "none");
                 break;
         }
