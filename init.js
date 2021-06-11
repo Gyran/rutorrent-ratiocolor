@@ -67,7 +67,7 @@ function colorRGB(color){
 function colorContrast(color){
     gamma = color[0]*0.299 + color[1]*0.587 + color[2]*0.114;
     c = gamma < 160 ? 255 : 0;
-    return "rgb(${c}, ${c}, ${c}";
+    return "rgb(${c}, ${c}, ${c})";
 }
 
 theWebUI.setRatioColors = function(){
