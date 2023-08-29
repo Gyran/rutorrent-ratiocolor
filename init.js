@@ -19,9 +19,9 @@ levels = [0, 1, 3, 30];
 
 // Colors of the diffrent levels. [r, g, b]
 colors = [  [255, 0, 0],
-            [255, 255, 0],
-            [0, 255, 0],
-            [123, 17, 203]
+            [255, 155, 50],
+            [0, 220, 0],
+            [0, 155, 255]
          ];
 
 //changeWhatEnum = ["cell-background", "font"];
