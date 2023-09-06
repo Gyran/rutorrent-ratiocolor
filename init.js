@@ -31,6 +31,11 @@ colors = [  [255, 0, 0],
 // font
 changeWhat = "cell-background";
 
+// whether to make the text on the colored background a contrasting color(white or black, depending on the brightness)
+// true
+// false
+contrast = true;
+
 settings = false; // not yet working as it should
 
 important = "!important\;"; //Adding support for other themes using the important-CSS trick
@@ -57,6 +62,12 @@ function colorMul(a, mul){
 
 function colorRGB(color){
     return "rgb(" + color[0] + ", " + color[1] + ", " + color[2] + ")";    
+}
+
+function colorContrast(color){
+    gamma = color[0]*0.299 + color[1]*0.587 + color[2]*0.114;
+    c = (color[1]>160) ? 0 : ((gamma < 155) ? 255 : 0);
+    return "rgb(" + c + ", " + c + ", " + c + ")";   
 }
 
 theWebUI.setRatioColors = function(){
@@ -89,6 +100,8 @@ theWebUI.setRatioColors = function(){
                 break;
             case "cell-background":
             default:
+                if (contrast)
+                    $(this).css("color", colorContrast(color));
                 $(this).attr('style', function(i, s) { return s.replace(/background-color:(.*?);/, '') + 'background-color:' + colorRGB(color) + important });
                 $(this).css("background-image", "none");
                 break;
